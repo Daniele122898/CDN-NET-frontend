@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'CDN-NET-Frontend'`, () => {
+  it(`should have as title 'CDN-NET-frontend'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('CDN-NET-Frontend');
+    expect(app.title).toEqual('CDN-NET-frontend');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('CDN-NET-Frontend app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('CDN-NET-frontend app is running!');
   });
 });
