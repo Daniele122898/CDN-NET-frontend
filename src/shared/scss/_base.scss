@@ -1,0 +1,11 @@
+@import "settings";
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  font-size: $m-size;
+  line-height: 1.6;
+}
