@@ -1,1 +1,52 @@
-<p>register works!</p>
+<div class="content-container">
+    <div class="form-container">
+        <form [formGroup]="registerForm" (ngSubmit)="register()">
+            <h1 class="form-header">Sign Up</h1>
+            <p class="form-subheader">Create an account to upload and manage files</p>
+
+            <div class="form-group">
+                <input
+                    type="text"
+                    class="form-control"
+                    formControlName="username"
+                    placeholder="Username"
+                    [ngClass]="{'is-invalid' : hasGeneralError('username')}"
+                >
+                <div class="invalid-feedback" *ngIf="hasGeneralError('username')">
+                    Please choose a username between 3-20 characters long
+                </div>
+            </div>
+            <div class="form-group">
+                <input
+                        type="password"
+                        class="form-control"
+                        formControlName="password"
+                        placeholder="Password"
+                        [ngClass]="{'is-invalid' : hasGeneralError('password')}"
+                >
+                <div class="invalid-feedback" *ngIf="hasGeneralError('password')">
+                    Please choose a password between 4-20 characters long
+                </div>
+            </div>
+            <div class="form-group">
+                <input
+                        type="password"
+                        class="form-control"
+                        formControlName="confirmPassword"
+                        placeholder="Confirm Password"
+                        [ngClass]="{'is-invalid' : hasGeneralError('confirmPassword')}"
+                >
+                <div class="invalid-feedback" *ngIf="hasGeneralError('confirmPassword')">
+                    Please choose a password between 4-20 characters long
+                </div>
+                <div class="invalid-feedback" *ngIf="this.registerForm.hasError('mismatch') && this.registerForm.get('confirmPassword').touched">
+                    Passwords do not match
+                </div>
+            </div>
+            <div class="form-group button-group">
+                <button class="button success-button">Submit</button>
+                <button class="button" [routerLink]="['/']">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

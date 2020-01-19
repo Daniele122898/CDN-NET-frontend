@@ -1,0 +1,47 @@
+@import "settings";
+
+.form-header {
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.form-subheader {
+  font-weight: normal;
+  margin-top: 0;
+}
+
+.form-group {
+  margin-bottom: $s-size;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  height: 3.6rem;
+  padding: 0.75rem 2rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #55595c;
+  background-color: #f7f7f9;
+  background-clip: padding-box;
+  border: 0 solid #ced4da;
+  border-bottom: 1px solid $light-grey;
+  border-radius: 0;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.invalid-feedback {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: $pastel-red;
+}
+
+.is-invalid {
+  border: 1px solid $pastel-red;
+}
