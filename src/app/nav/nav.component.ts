@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
+import {Subject, Subscription} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, OnDestroy {
+
 
   private loggedIn = false;
+
+  private destroy$ = new Subject();
 
   constructor(
       private authService: AuthService,
@@ -19,7 +24,7 @@ export class NavComponent implements OnInit {
   ngOnInit() {
     this.loggedIn = this.authService.loggedIn();
 
-    this.authService.AuthObs.subscribe(() => {
+    this.authService.AuthObs.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loggedIn = this.authService.loggedIn();
     });
   }
@@ -27,5 +32,10 @@ export class NavComponent implements OnInit {
   onLogout() {
     this.authService.logout();
     this.router.navigate(['/']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.unsubscribe();
   }
 }
