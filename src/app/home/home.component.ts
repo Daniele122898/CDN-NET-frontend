@@ -16,6 +16,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn = this.authService.loggedIn();
+
+    this.authService.AuthObs.subscribe(() => {
+      this.isLoggedIn = this.authService.loggedIn();
+    });
   }
 
 }

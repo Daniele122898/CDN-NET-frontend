@@ -4,11 +4,14 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {map} from 'rxjs/operators';
 import {LoginResponse} from '../app/models/LoginResponse';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private authSubj = new BehaviorSubject<void>(null);
+  public AuthObs = this.authSubj.asObservable();
 
   private baseUrl = environment.apiUrl + 'auth/';
   private jwtHelper = new JwtHelperService();
@@ -36,9 +39,17 @@ export class AuthService {
                 localStorage.setItem('token', loginResp.token);
                 localStorage.setItem('user', JSON.stringify(loginResp.user));
                 this.decodedToken = this.jwtHelper.decodeToken(loginResp.token);
+                this.authSubj.next(null);
               }
             })
         );
+  }
+
+  public logout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    this.decodedToken = null;
+    this.authSubj.next(null);
   }
 
   public getUsername(): string {
