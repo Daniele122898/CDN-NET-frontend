@@ -6,7 +6,7 @@
     <div *ngIf="!isLoggedIn" class="content-container flex-direction-col content">
         <p class="center-text not-logged-in">Please login or register</p>
         <div class="flex flex-direction-row justify-content-center">
-            <button class="button login-buttons">
+            <button class="button login-buttons" [routerLink]="['/login']">
                 Sign in
             </button>
             <button class="button login-buttons" [routerLink]="['/register']">

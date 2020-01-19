@@ -9,6 +9,7 @@ import { RegisterComponent } from './register/register.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {JwtModule} from '@auth0/angular-jwt';
+import { LoginComponent } from './login/login.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -18,7 +19,8 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     HomeComponent,
-    RegisterComponent
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
