@@ -1,0 +1,19 @@
+@import "settings";
+
+.button {
+  background: white;
+  color: black;
+  border: black 1px solid;
+  border-radius: 6px;
+  padding: $s-size;
+  display: inline-block;
+  text-decoration: none;
+  line-height: 1;
+
+  transition: all 100ms ease-in-out;
+
+  &:hover {
+    color: white;
+    background: black;
+  }
+}

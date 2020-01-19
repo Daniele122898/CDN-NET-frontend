@@ -2,11 +2,13 @@
 
 .home {
   display: flex;
+  flex-direction: column;
   width: 100vw;
   height: 100vh;
   position: relative;
   > .header {
     display: flex;
+    flex-direction: column;
     position: relative;
     width: 100%;
     height: 50%;
@@ -17,8 +19,30 @@
       text-align: center;
       align-self: center;
       font-weight: normal;
+      margin: 0;
 
       font-size: $xl-size;
+    }
+    > p {
+      margin: 0;
+      text-align: center;
+      align-self: center;
+      font-weight: normal;
+      color: $darker-grey;
+
+      font-size: $m-size;
+    }
+  }
+
+  > .content {
+    > .not-logged-in {
+      color: $pastel-red;
+      font-size: $lm-size;
+      margin-top: 0;
+    }
+
+    .login-buttons:first-child {
+      margin-right: $s-size;
     }
   }
 }
