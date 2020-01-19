@@ -8,6 +8,11 @@ import {appRoutes} from './routes';
 import { RegisterComponent } from './register/register.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {JwtModule} from '@auth0/angular-jwt';
+
+export function tokenGetter() {
+  return localStorage.getItem('token');
+}
 
 @NgModule({
   declarations: [
@@ -19,7 +24,15 @@ import {HttpClientModule} from '@angular/common/http';
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter,
+        // TODO add this to environment
+        whitelistedDomains: [ 'localhost:5000' ],
+        blacklistedRoutes: [ 'localhost:5000/api/auth' ]
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
