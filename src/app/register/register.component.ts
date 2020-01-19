@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +13,9 @@ export class RegisterComponent implements OnInit {
   private registerForm: FormGroup;
 
   constructor(
-      private fb: FormBuilder
+      private fb: FormBuilder,
+      private authService: AuthService,
+      private router: Router
   ) { }
 
   private static passwordMatchValidator(g: FormGroup) {
@@ -37,6 +41,18 @@ export class RegisterComponent implements OnInit {
     if (!this.registerForm.valid) {
       return;
     }
+    const val = this.registerForm.value;
+    this.authService.register(val.username, val.password)
+        .subscribe(() => {
+          console.log('Successfully registered');
+        }, err => {
+          console.log('Error', err);
+        }, () => {
+          this.authService.login(val.username, val.password)
+              .subscribe(() => {
+                this.router.navigate(['/']);
+              });
+        });
   }
 
   private hasGeneralError(formName: string): boolean {
