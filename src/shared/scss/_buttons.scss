@@ -27,3 +27,7 @@
     background: $green;
   }
 }
+
+button:focus {
+  outline: none;
+}
