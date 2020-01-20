@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
+import {AlertService} from '../../services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -15,8 +16,16 @@ export class LoginComponent implements OnInit {
   constructor(
       private fb: FormBuilder,
       private authService: AuthService,
-      private router: Router
+      private router: Router,
+      private alert: AlertService
   ) { }
+
+  private static formatError(err: any): string {
+    if (err.status === 401) {
+      return 'Username or password incorrect';
+    }
+    return err.statusText;
+  }
 
   ngOnInit() {
     this.createRegisterForm();
@@ -38,10 +47,10 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(username, password)
         .subscribe(() => {
-          console.log('Successfully logged in');
+          this.alert.success('Successfully logged in');
           this.router.navigate(['/']);
         }, (err) => {
-          console.log('Error', err);
+          this.alert.error('Failed to login: ' + LoginComponent.formatError(err));
         });
   }
 

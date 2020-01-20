@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
-import {Subject, Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {AlertService} from '../../services/alert.service';
 
 @Component({
   selector: 'app-nav',
@@ -18,7 +19,8 @@ export class NavComponent implements OnInit, OnDestroy {
 
   constructor(
       private authService: AuthService,
-      private router: Router
+      private router: Router,
+      private alert: AlertService
   ) { }
 
   ngOnInit() {
@@ -31,6 +33,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.authService.logout();
+    this.alert.success('Successfully logged out');
     this.router.navigate(['/']);
   }
 
