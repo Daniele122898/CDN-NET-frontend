@@ -16,6 +16,16 @@
     color: white;
     background: black;
   }
+
+  &:disabled {
+    color: $grey;
+    border: $grey 1px solid;
+  }
+
+  &:disabled:hover {
+    background-color: white;
+    color: $grey;
+  }
 }
 
 .success-button {
