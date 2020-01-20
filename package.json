@@ -21,6 +21,7 @@
     "@angular/router": "~8.2.14",
     "@auth0/angular-jwt": "^3.0.1",
     "alertifyjs": "^1.13.1",
+    "dropzone": "^5.5.1",
     "normalize.css": "^8.0.1",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",

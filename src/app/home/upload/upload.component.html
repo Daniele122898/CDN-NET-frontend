@@ -1,0 +1,34 @@
+<div class="upload-container">
+    <div class="upload-form">
+        <form [formGroup]="uploadForm" (ngSubmit)="upload()">
+            <h1 class="form-header">Upload File(s)</h1>
+            <p class="form-subheader">You do not need to add any of the additional information below</p>
+            <p class="form-subheader">it will be auto generated for you</p>
+
+            <div class="form-group">
+                <input
+                        type="text"
+                        class="form-control"
+                        formControlName="filename"
+                        placeholder="Filename"
+                >
+            </div>
+            <div class="form-group">
+                <input
+                        type="number"
+                        class="form-control"
+                        formControlName="albumId"
+                        placeholder="Album ID"
+                >
+            </div>
+        </form>
+    </div>
+    <div id="dropzone" [ngClass]="{'dragover': this.draggingOver}">
+        <p *ngIf="dropzone.files.length == 0 && !draggingOver">Drop files here or click</p>
+        <p *ngIf="this.draggingOver" style="z-index: 12;">Drop file here...</p>
+        <div class="fallback">
+            <input name="file" type="file" multiple />
+        </div>
+    </div>
+</div>
+
