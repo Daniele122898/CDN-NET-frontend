@@ -35,6 +35,16 @@
   }
 }
 
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+
+  > .button:first-child {
+    margin-right: $s-size;
+  }
+}
+
 .invalid-feedback {
   width: 100%;
   margin-top: 0.25rem;

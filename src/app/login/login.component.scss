@@ -8,16 +8,6 @@
 
   align-items: center;
 
-  .button-group {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-
-    > .button:first-child {
-      margin-right: $s-size;
-    }
-  }
-
   > form {
     width: 100%;
 

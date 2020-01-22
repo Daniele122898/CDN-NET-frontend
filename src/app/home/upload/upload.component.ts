@@ -1,7 +1,21 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {AlertService} from '../../../services/alert.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import * as dropzone from 'dropzone';
+import {DropzoneOptions} from 'dropzone';
+import * as Dropzone from 'dropzone';
+
+const previewTemplate = '' +
+    '  <div class="dz-details" style="' +
+    'display: inline-block; vertical-align: top; width: 33%; margin-top: 0.8rem' +
+    '">\n' +
+    '    <img data-dz-thumbnail data-dz-remove />\n' +
+    '    <div class="dz-filename" style="' +
+    'font-size: 80%; width: 50%; overflow-wrap: break-word; margin: auto;\n' +
+    '"><span data-dz-name></span></div>\n' +
+    '    <div class="dz-size" data-dz-size style="font-size: 80% "></div>\n' +
+    '  </div>\n' +
+    '  <div class="dz-error-message"><span data-dz-errormessage></span></div>\n' +
+    '</div>';
 
 @Component({
   selector: 'app-upload',
@@ -11,7 +25,7 @@ import * as dropzone from 'dropzone';
 export class UploadComponent implements OnInit, OnDestroy {
 
   private uploadForm: FormGroup;
-  private dropzone: any;
+  private dropzone: Dropzone;
   private draggingOver = false;
 
   constructor(
@@ -23,16 +37,18 @@ export class UploadComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.createForm();
-    const dropzoneConfig = {
+    const dropzoneConfig: DropzoneOptions = {
       url: '/#',
-      createImageThumbnails: false,
-      previewTemplate: ''
+      createImageThumbnails: true,
+      previewTemplate,
+      autoProcessQueue: false
     };
-    this.dropzone = new dropzone('div#dropzone', dropzoneConfig);
+    this.dropzone = new Dropzone('div#dropzone', dropzoneConfig);
     this.dropzone.on('dragover', this.dragover.bind(this));
     this.dropzone.on('dragleave', this.dragleave.bind(this));
     this.dropzone.on('dragend', this.dragend.bind(this));
     this.dropzone.on('drop', this.drop.bind(this));
+    this.dropzone.on('addedfile', this.addedFile.bind(this));
   }
 
 
@@ -41,6 +57,11 @@ export class UploadComponent implements OnInit, OnDestroy {
       filename: [''],
       albumId: [null]
     });
+  }
+
+  private addedFile(event) {
+    console.log(event);
+    console.log(this.dropzone);
   }
 
   private upload() {
@@ -52,6 +73,10 @@ export class UploadComponent implements OnInit, OnDestroy {
 
   private hasGeneralError(formName: string): boolean {
     return this.uploadForm.get(formName).errors && this.uploadForm.get(formName).touched;
+  }
+
+  private cancelUpload() {
+    this.dropzone.removeAllFiles();
   }
 
   private dragleave() {
@@ -75,9 +100,9 @@ export class UploadComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.dropzone.removeEventListener('dragover', this.dragover);
-    this.dropzone.removeEventListener('dragleave', this.dragleave);
-    this.dropzone.removeEventListener('dragend', this.dragend);
-    this.dropzone.removeEventListener('drop', this.drop);
+    this.dropzone.off('dragover', this.dragover);
+    this.dropzone.off('dragleave', this.dragleave);
+    this.dropzone.off('dragend', this.dragend);
+    this.dropzone.off('drop', this.drop);
   }
 }

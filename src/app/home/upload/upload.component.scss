@@ -10,7 +10,6 @@
 
   > .upload-form {
     width: 100%;
-
     @media (min-width: $desktop-breakpoint) {
       width: 60%;
     }
@@ -26,40 +25,40 @@
     margin-bottom: $s-size;
 
     > form {
+      display: flex;
+      flex-direction: column;
       width: 100%;
       > p:first-of-type {
         margin: 0;
       }
+
+      > #dropzone {
+        display: table-row-group;
+        box-sizing: border-box;
+        padding: $s-size $s-size ($s-size + 0.8rem) $s-size;
+        width: 100%;
+        margin-bottom: $s-size;
+        min-height: 10rem;
+        border: 1px $darker-grey dashed;
+        color: $darker-grey;
+        text-align: center;
+
+        p {
+          z-index: -10;
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
   }
+}
 
-  > #dropzone {
-    width: 100%;
-
-    @media (min-width: $desktop-breakpoint) {
-      width: 60%;
-    }
-
-    @media (min-width: ($desktop-breakpoint *2)) {
-      width: 50%;
-    }
-    height: 10rem;
-    border: 1px $darker-grey dashed;
-    color: $darker-grey;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    p {
-      z-index: -10;
-    }
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
+.dropzone-details {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 3.2rem;
 }
 
 .dragover {
