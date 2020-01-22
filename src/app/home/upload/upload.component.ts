@@ -104,5 +104,6 @@ export class UploadComponent implements OnInit, OnDestroy {
     this.dropzone.off('dragleave', this.dragleave);
     this.dropzone.off('dragend', this.dragend);
     this.dropzone.off('drop', this.drop);
+    this.dropzone.off('addedfile', this.addedFile);
   }
 }
