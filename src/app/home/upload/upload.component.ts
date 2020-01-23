@@ -1,8 +1,10 @@
 import {ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {AlertService} from '../../../services/alert.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {DropzoneFile, DropzoneOptions} from 'dropzone';
+import {DropzoneOptions} from 'dropzone';
 import * as Dropzone from 'dropzone';
+import {UploadService} from '../../../services/upload.service';
+import {HttpEvent, HttpEventType} from '@angular/common/http';
 
 const previewTemplate = '' +
     '  <div class="dz-details" style="' +
@@ -28,11 +30,13 @@ export class UploadComponent implements OnInit, OnDestroy {
   private dropzone: Dropzone;
   private draggingOver = false;
   private files: File[] = [];
+  private progress: number;
 
   constructor(
       private fb: FormBuilder,
       private alert: AlertService,
-      private changeDetection: ChangeDetectorRef
+      private changeDetection: ChangeDetectorRef,
+      private uploadService: UploadService
   ) {
   }
 
@@ -52,12 +56,30 @@ export class UploadComponent implements OnInit, OnDestroy {
     this.dropzone.on('addedfile', this.addedFile.bind(this));
   }
 
-
   private createForm() {
     this.uploadForm = this.fb.group({
       filename: [''],
       albumId: [null]
+    }, {
+      validators: this.formValidator
     });
+  }
+
+  private formValidator(g: FormGroup) {
+    const filenames: string = g.get('filename').value;
+    if (!filenames || filenames.length === 0) {
+      return null;
+    }
+
+    if (!filenames.includes(';') && this.files.length === 1) {
+      return null;
+    }
+
+    if (filenames.split(';').length === this.files.length) {
+      return null;
+    }
+
+    return { filenameError: true };
   }
 
   private addedFile(event) {
@@ -70,13 +92,35 @@ export class UploadComponent implements OnInit, OnDestroy {
       return;
     }
     console.log('upload');
+    this.uploadService.uploadFiles(this.files).subscribe((event: HttpEvent<any>) => {
+      switch (event.type) {
+        case HttpEventType.Sent:
+          console.log('Request has been made!');
+          break;
+        case HttpEventType.ResponseHeader:
+          console.log('Response header has been received!');
+          break;
+        case HttpEventType.UploadProgress:
+          this.progress = Math.round(event.loaded / event.total * 100);
+          console.log(`Uploaded! ${this.progress}%`);
+          break;
+        case HttpEventType.Response:
+          console.log('User successfully created!', event.body);
+          this.clearDropzoneAndClearForm();
+          setTimeout(() => {
+            this.progress = 0;
+          }, 1500);
+      }
+    }, (err => {
+      console.log('upload error', err);
+    }));
   }
 
   private hasGeneralError(formName: string): boolean {
     return this.uploadForm.get(formName).errors && this.uploadForm.get(formName).touched;
   }
 
-  private cancelUpload() {
+  private clearDropzoneAndClearForm() {
     this.files = this.files.filter((f) => {
       const foundFile = this.dropzone.files.find((df) => df.name === f.name);
       return !foundFile;
@@ -91,6 +135,8 @@ export class UploadComponent implements OnInit, OnDestroy {
       }
     }
     this.files = [];
+    // reset form as well
+    this.uploadForm.reset();
   }
 
   private dragleave() {
