@@ -12,6 +12,9 @@
                         formControlName="filename"
                         placeholder="Filename(s) separated by ; if multiple"
                 >
+                <div class="invalid-feedback" *ngIf="uploadForm.hasError('filenameError')">
+                    When adding filenames please specify one for EACH file and separate by ;
+                </div>
             </div>
             <div class="form-group">
                 <input
@@ -20,6 +23,10 @@
                         formControlName="albumId"
                         placeholder="Album ID"
                 >
+            </div>
+            <div class="form-group">
+                <label for="isPublic" style="margin-right: 0.8rem">Is Public</label>
+                <input id="isPublic" type="checkbox" formControlName="isPublic">
             </div>
             <p style="margin: 0">Drop files or click in box</p>
             <div id="dropzone" [ngClass]="{'dragover': this.draggingOver}">

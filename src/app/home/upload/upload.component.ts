@@ -59,9 +59,10 @@ export class UploadComponent implements OnInit, OnDestroy {
   private createForm() {
     this.uploadForm = this.fb.group({
       filename: [''],
-      albumId: [null]
+      albumId: [null],
+      isPublic: [true]
     }, {
-      validators: this.formValidator
+      validators: this.formValidator.bind(this)
     });
   }
 
@@ -75,7 +76,14 @@ export class UploadComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    if (filenames.split(';').length === this.files.length) {
+    const split = filenames.split(';');
+
+    if (split.length === this.files.length + 1) {
+      return null;
+    }
+
+    // See if maybe only the last one is missing
+    if (split.length === this.files.length && split[split.length - 1].trim().length > 0) {
       return null;
     }
 
