@@ -1,7 +1,7 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {AlertService} from '../../../services/alert.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {DropzoneOptions} from 'dropzone';
+import {DropzoneFile, DropzoneOptions} from 'dropzone';
 import * as Dropzone from 'dropzone';
 
 const previewTemplate = '' +
@@ -27,6 +27,7 @@ export class UploadComponent implements OnInit, OnDestroy {
   private uploadForm: FormGroup;
   private dropzone: Dropzone;
   private draggingOver = false;
+  private files: File[] = [];
 
   constructor(
       private fb: FormBuilder,
@@ -60,8 +61,8 @@ export class UploadComponent implements OnInit, OnDestroy {
   }
 
   private addedFile(event) {
-    console.log(event);
-    console.log(this.dropzone);
+    console.log('added file event:', event);
+    this.files.push(event);
   }
 
   private upload() {
@@ -76,7 +77,20 @@ export class UploadComponent implements OnInit, OnDestroy {
   }
 
   private cancelUpload() {
+    this.files = this.files.filter((f) => {
+      const foundFile = this.dropzone.files.find((df) => df.name === f.name);
+      return !foundFile;
+    });
+    // Removes all files that have been added through dropzonejs
     this.dropzone.removeAllFiles();
+    // Checks if we have to remove files that have been added through copy paste
+    if (this.files.length > 0) {
+      for (const file of this.files) {
+        // @ts-ignore
+        this.dropzone.removeFile(file);
+      }
+    }
+    this.files = [];
   }
 
   private dragleave() {
@@ -105,5 +119,20 @@ export class UploadComponent implements OnInit, OnDestroy {
     this.dropzone.off('dragend', this.dragend);
     this.dropzone.off('drop', this.drop);
     this.dropzone.off('addedfile', this.addedFile);
+  }
+
+  @HostListener('window:paste', ['$event']) handlePaste(event: ClipboardEvent) {
+    if (event.clipboardData.files.length > 0) {
+      const file = event.clipboardData.files[0];
+      // @ts-ignore
+      file.status = 'queued';
+      // @ts-ignore
+      file.accepted = true;
+      console.log('got file: ', file);
+      this.dropzone.emit('addedfile', file);
+      this.dropzone.emit('thumbnail', file, 'https://i.imgur.com/PTRCNrQ.png');
+    } else {
+      console.log('text:', event.clipboardData.getData('text'));
+    }
   }
 }
