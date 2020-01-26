@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { NavComponent } from './nav/nav.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UploadComponent } from './home/upload/upload.component';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -40,7 +41,8 @@ export function tokenGetter() {
         whitelistedDomains: [ 'localhost:5000' ],
         blacklistedRoutes: [ 'localhost:5000/api/auth' ]
       }
-    })
+    }),
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

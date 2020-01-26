@@ -55,3 +55,22 @@
 .is-invalid {
   border: 1px solid $pastel-red;
 }
+
+.is-toggled {
+  color: $blue;
+}
+
+.error-banner {
+  background-color: $pastel-red;
+}
+
+.success-banner {
+  background-color: $green;
+}
+
+.banner-text {
+  margin: 0;
+  text-align: center;
+  color: white;
+  padding: 3px;
+}

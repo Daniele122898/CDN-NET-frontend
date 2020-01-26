@@ -5,6 +5,9 @@ import {DropzoneOptions} from 'dropzone';
 import * as Dropzone from 'dropzone';
 import {UploadService} from '../../../services/upload.service';
 import {HttpEvent, HttpEventType} from '@angular/common/http';
+import {faCheckSquare} from '@fortawesome/free-solid-svg-icons';
+import {faCheckSquare as farCheckSquare} from '@fortawesome/free-regular-svg-icons';
+import {UploadFileInfo} from '../../models/UploadFileInfo';
 
 const previewTemplate = '' +
     '  <div class="dz-details" style="' +
@@ -31,6 +34,10 @@ export class UploadComponent implements OnInit, OnDestroy {
   private draggingOver = false;
   private files: File[] = [];
   private progress: number;
+  private faCheckSquare = faCheckSquare;
+  private farCheckSquare = farCheckSquare;
+  private error: string = null;
+  private success: string = null;
 
   constructor(
       private fb: FormBuilder,
@@ -54,6 +61,7 @@ export class UploadComponent implements OnInit, OnDestroy {
     this.dropzone.on('dragend', this.dragend.bind(this));
     this.dropzone.on('drop', this.drop.bind(this));
     this.dropzone.on('addedfile', this.addedFile.bind(this));
+    this.dropzone.on('removedfile', this.removedFile.bind(this));
   }
 
   private createForm() {
@@ -95,12 +103,56 @@ export class UploadComponent implements OnInit, OnDestroy {
     this.files.push(event);
   }
 
+  private removedFile(event) {
+    console.log('removed file event:', event);
+    this.files = this.files.filter((file) => file.name !== event.name);
+    this.uploadForm.updateValueAndValidity();
+  }
+
   private upload() {
     if (!this.uploadForm.valid) {
       return;
     }
-    console.log('upload');
-    this.uploadService.uploadFiles(this.files).subscribe((event: HttpEvent<any>) => {
+    // Generate info list
+    let filenames: string = this.uploadForm.get('filename').value;
+    let infos: UploadFileInfo[] | null = null;
+    if (filenames && filenames.trim().length > 0) {
+      filenames = filenames.trim();
+      const split = filenames.split(';');
+      for (let i = 0; i < split.length; i++) {
+        split[i] = split[i].trim();
+      }
+      const filtered = split.filter((str) => str.length > 0);
+      if (filtered.length !== this.files.length) {
+        this.error = 'Please specify same amount of names as files in left to right order';
+        return;
+      }
+      infos = [];
+      const isPublic: boolean = this.uploadForm.get('isPublic').value;
+      filtered.forEach((n) => {
+        const info: UploadFileInfo = {
+          name: n,
+          isPublic
+        };
+        infos.push(info);
+      });
+    } else {
+      infos = [];
+      const isPublic: boolean = this.uploadForm.get('isPublic').value;
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.files.length; i++) {
+        const info: UploadFileInfo = {
+          isPublic
+        };
+        infos.push(info);
+      }
+    }
+
+    const albumId: number | null = this.uploadForm.get('albumId').value;
+
+    this.success = null;
+
+    this.uploadService.uploadFiles(this.files, infos, albumId).subscribe((event: HttpEvent<any>) => {
       switch (event.type) {
         case HttpEventType.Sent:
           console.log('Request has been made!');
@@ -121,7 +173,12 @@ export class UploadComponent implements OnInit, OnDestroy {
       }
     }, (err => {
       console.log('upload error', err);
+      this.error = err.error;
     }));
+  }
+
+  private toggleIsPublic() {
+    this.uploadForm.get('isPublic').setValue(!this.uploadForm.get('isPublic').value);
   }
 
   private hasGeneralError(formName: string): boolean {
@@ -144,7 +201,9 @@ export class UploadComponent implements OnInit, OnDestroy {
     }
     this.files = [];
     // reset form as well
-    this.uploadForm.reset();
+    this.error = null;
+    this.success = null;
+    this.uploadForm.reset({isPublic: true});
   }
 
   private dragleave() {

@@ -15,13 +15,16 @@ export class UploadService {
       private http: HttpClient
   ) { }
 
-  public uploadFiles(files: File[], info?: UploadFileInfo[]) {
+  public uploadFiles(files: File[], info?: UploadFileInfo[], albumId?: number) {
     const fd = new FormData();
     if (info && info.length > 0) {
       if (info.length !== files.length) {
         return throwError('Info and file list mismatch');
       }
       fd.append('Infos', JSON.stringify(info));
+    }
+    if (albumId) {
+      fd.append('AlbumId', '' + albumId);
     }
     files.forEach((file) => {
       fd.append('Files', file, file.name);

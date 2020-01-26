@@ -5,6 +5,16 @@
             <p class="form-subheader">You do not need to add any of the additional information below</p>
             <p class="form-subheader">it will be auto generated for you</p>
 
+            <div *ngIf="this.error && this.error.length > 0" class="error-banner form-group">
+                <p class="banner-text">{{this.error}}</p>
+            </div>
+
+            <div *ngIf="this.success && this.success.length > 0" class="success-banner form-group">
+                <p class="banner-text">{{this.success}}</p>
+            </div>
+
+            <div></div>
+
             <div class="form-group">
                 <input
                         type="text"
@@ -25,8 +35,12 @@
                 >
             </div>
             <div class="form-group">
-                <label for="isPublic" style="margin-right: 0.8rem">Is Public</label>
-                <input id="isPublic" type="checkbox" formControlName="isPublic">
+                <p style="margin: 0">Is Public</p>
+                <fa-icon
+                    [ngClass]="{'is-toggled' : uploadForm.get('isPublic').value}"
+                    [icon]="(uploadForm.get('isPublic').value ? faCheckSquare : farCheckSquare)"
+                    (click)="toggleIsPublic()"
+                    size="lg"></fa-icon>
             </div>
             <p style="margin: 0">Drop files or click in box</p>
             <div id="dropzone" [ngClass]="{'dragover': this.draggingOver}">
@@ -37,7 +51,7 @@
 
             <div class="form-group button-group">
                 <button type="submit" class="button success-button" [disabled]="this.files.length === 0 || !this.uploadForm.valid">Upload</button>
-                <button type="reset" class="button" (click)="clearDropzoneAndClearForm()">Cancel</button>
+                <button type="button" class="button" (click)="clearDropzoneAndClearForm()">Cancel</button>
             </div>
         </form>
     </div>

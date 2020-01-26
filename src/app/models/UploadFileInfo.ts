@@ -1,4 +1,4 @@
 export interface UploadFileInfo {
-    name: string;
-    IsPublic: boolean;
+    name?: string;
+    isPublic: boolean;
 }
