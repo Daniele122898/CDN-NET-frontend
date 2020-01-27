@@ -32,6 +32,18 @@
         margin: 0;
       }
 
+      > .progress-bar {
+        width: 100%;
+        height: $m-size;
+        margin-bottom: $s-size;
+        background-color: $input-grey;
+
+        >.progress-bar-progress {
+          height: 100%;
+          background-color: $green;
+        }
+      }
+
       > #dropzone {
         display: table-row-group;
         box-sizing: border-box;
@@ -49,6 +61,51 @@
 
         &:hover {
           cursor: pointer;
+        }
+      }
+    }
+  }
+
+  > .file-response-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: $m-size;
+
+    width: 100%;
+    @media (min-width: $desktop-breakpoint) {
+      width: 60%;
+    }
+    @media (min-width: ($desktop-breakpoint *2)) {
+      width: 50%;
+    }
+
+    border: 1px solid $light-grey;
+
+    > .file-card {
+      &:not(:last-child) {
+        border-bottom: 1px solid $light-grey;
+      }
+      padding: $s-size;
+      display: flex;
+      align-items: center;
+
+      > .file-card-image {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        > img {
+          width: $avatar-size;
+          height: $avatar-size;
+        }
+      }
+
+      > .file-card-info {
+        line-height: 1.4;
+        padding: $s-size;
+
+        > p {
+          margin: 0;
         }
       }
     }

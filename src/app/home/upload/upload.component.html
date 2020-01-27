@@ -9,9 +9,14 @@
                 <p class="banner-text">{{this.error}}</p>
             </div>
 
-            <div *ngIf="this.success && this.success.length > 0" class="success-banner form-group">
-                <p class="banner-text">{{this.success}}</p>
+            <div *ngIf="this.uploading" class="progress-bar">
+                <div class="progress-bar-progress" [style.width]="progress+'%'"></div>
             </div>
+
+            <div *ngIf="this.success" class="success-banner form-group">
+                <p class="banner-text">Successfully uploaded files</p>
+            </div>
+
 
             <div></div>
 
@@ -54,6 +59,20 @@
                 <button type="button" class="button" (click)="clearDropzoneAndClearForm()">Cancel</button>
             </div>
         </form>
+    </div>
+    <div *ngIf="this.fileResponses && this.fileResponses.length > 0" class="file-response-container">
+        <div class="file-card" *ngFor="let file of fileResponses">
+            <div class="file-card-image">
+                <img src="{{(file.contentType.includes('image') ? file.url : defaultImagePreview)}}" [style.object-fit]="(file.contentType.includes('image') ? 'cover' : 'contain')">
+            </div>
+            <div class="file-card-info">
+                <p>Id: {{file.id}}</p>
+                <p>Is Public: {{file.isPublic ? 'true' : 'false'}}</p>
+                <p>Name: {{file.name}}</p>
+                <p>Album Id: {{file.albumId == null ? 'null' : file.albumId}}</p>
+                <p>URL: <a href="{{file.url}}" target="_blank">Click Here</a></p>
+            </div>
+        </div>
     </div>
 </div>
 

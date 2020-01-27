@@ -7,7 +7,7 @@ import {UploadService} from '../../../services/upload.service';
 import {HttpEvent, HttpEventType} from '@angular/common/http';
 import {faCheckSquare} from '@fortawesome/free-solid-svg-icons';
 import {faCheckSquare as farCheckSquare} from '@fortawesome/free-regular-svg-icons';
-import {UploadFileInfo} from '../../models/UploadFileInfo';
+import {UploadFileInfo, UploadFileResponse} from '../../models/UploadFileInfo';
 
 const previewTemplate = '' +
     '  <div class="dz-details" style="' +
@@ -33,11 +33,15 @@ export class UploadComponent implements OnInit, OnDestroy {
   private dropzone: Dropzone;
   private draggingOver = false;
   private files: File[] = [];
-  private progress: number;
   private faCheckSquare = faCheckSquare;
   private farCheckSquare = farCheckSquare;
   private error: string = null;
-  private success: string = null;
+  private success = false;
+  private defaultImagePreview = 'https://i.imgur.com/PTRCNrQ.png';
+
+  private uploading = false;
+  private progress = 0;
+  private fileResponses: UploadFileResponse[] = null;
 
   constructor(
       private fb: FormBuilder,
@@ -100,6 +104,9 @@ export class UploadComponent implements OnInit, OnDestroy {
 
   private addedFile(event) {
     console.log('added file event:', event);
+    if (!event.type.includes('image/')) {
+      this.dropzone.emit('thumbnail', event, this.defaultImagePreview);
+    }
     this.files.push(event);
   }
 
@@ -150,12 +157,13 @@ export class UploadComponent implements OnInit, OnDestroy {
 
     const albumId: number | null = this.uploadForm.get('albumId').value;
 
-    this.success = null;
+    this.success = false;
 
     this.uploadService.uploadFiles(this.files, infos, albumId).subscribe((event: HttpEvent<any>) => {
       switch (event.type) {
         case HttpEventType.Sent:
           console.log('Request has been made!');
+          this.uploading = true;
           break;
         case HttpEventType.ResponseHeader:
           console.log('Response header has been received!');
@@ -165,15 +173,17 @@ export class UploadComponent implements OnInit, OnDestroy {
           console.log(`Uploaded! ${this.progress}%`);
           break;
         case HttpEventType.Response:
-          console.log('User successfully created!', event.body);
+          console.log('File successfully uploaded!', event.body);
+          this.fileResponses = event.body;
           this.clearDropzoneAndClearForm();
-          setTimeout(() => {
-            this.progress = 0;
-          }, 1500);
+          this.progress = 0;
+          this.uploading = false;
+          this.success = true;
       }
     }, (err => {
       console.log('upload error', err);
       this.error = err.error;
+      this.uploading = false;
     }));
   }
 
@@ -202,7 +212,7 @@ export class UploadComponent implements OnInit, OnDestroy {
     this.files = [];
     // reset form as well
     this.error = null;
-    this.success = null;
+    this.success = false;
     this.uploadForm.reset({isPublic: true});
   }
 
@@ -243,7 +253,7 @@ export class UploadComponent implements OnInit, OnDestroy {
       file.accepted = true;
       console.log('got file: ', file);
       this.dropzone.emit('addedfile', file);
-      this.dropzone.emit('thumbnail', file, 'https://i.imgur.com/PTRCNrQ.png');
+      this.dropzone.emit('thumbnail', file, this.defaultImagePreview);
     } else {
       console.log('text:', event.clipboardData.getData('text'));
     }
