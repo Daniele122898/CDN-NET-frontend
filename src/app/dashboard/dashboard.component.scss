@@ -1,0 +1,104 @@
+@import "src/shared/scss/settings";
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: $s-size;
+
+  > .file-row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: $lm-size;
+
+    > .file-holder {
+
+      &:not(:last-child) {
+        margin-right: $lm-size;
+      }
+
+      display: flex;
+      flex-direction: column;
+      flex: 1 0 0%;
+      width: 100%;
+
+      > .file-card__empty {
+        width: 100%;
+        height: 100%;
+      }
+
+      > .file-card {
+        > .file-card__list {
+          display: flex;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+          flex-direction: column;
+          padding-left: 0;
+          margin-top: 0;
+          margin-bottom: 0;
+          box-shadow: none;
+
+          border: 1px solid $light-grey;
+          border-top: none;
+          border-bottom: none;
+
+          > .file-card__list-item {
+            &:first-child {
+              border-top: none;
+            }
+
+            position: relative;
+            display: block;
+            padding: .75rem 1.25rem;
+            margin-bottom: -1px;
+            background-color: #fff;
+            border: 1px solid rgba(0,0,0,0.125);
+            border-right: 0;
+            border-left: 0;
+            border-radius: 0;
+          }
+        }
+
+        > .file-card__id {
+          margin: 0;
+          text-align: right;
+          padding: 0 10px 0 0;
+          border: 1px solid $light-grey;
+          border-top: none;
+
+          p {
+            margin-bottom: 0;
+            margin-top: 0;
+          }
+        }
+
+        > .file-card__buttons {
+          width: 100%;
+
+          > .file-card__delete-button {
+            width: 100%;
+            padding: $s-size;
+            outline: none;
+            border: none;
+            text-decoration: none;
+            line-height: 1;
+            background-color: $pastel-red;
+            color: white;
+          }
+        }
+
+        > .file-card-img {
+          height: $avatar-size * 2;
+          border: 1px solid $light-grey;
+          border-bottom: none;
+          img {
+            width: 100%;
+            height: $avatar-size * 2;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+  }
+}

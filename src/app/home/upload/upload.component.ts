@@ -3,7 +3,7 @@ import {AlertService} from '../../../services/alert.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {DropzoneOptions} from 'dropzone';
 import * as Dropzone from 'dropzone';
-import {UploadService} from '../../../services/upload.service';
+import {FileService} from '../../../services/file.service';
 import {HttpEvent, HttpEventType} from '@angular/common/http';
 import {faCheckSquare} from '@fortawesome/free-solid-svg-icons';
 import {faCheckSquare as farCheckSquare} from '@fortawesome/free-regular-svg-icons';
@@ -47,7 +47,7 @@ export class UploadComponent implements OnInit, OnDestroy {
       private fb: FormBuilder,
       private alert: AlertService,
       private changeDetection: ChangeDetectorRef,
-      private uploadService: UploadService
+      private uploadService: FileService
   ) {
   }
 

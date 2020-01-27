@@ -7,9 +7,9 @@ import {throwError} from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UploadService {
+export class FileService {
 
-  private uploadUrl = environment.apiUrl + 'upload/multi';
+  private baseUrl = environment.apiUrl;
 
   constructor(
       private http: HttpClient
@@ -29,6 +29,14 @@ export class UploadService {
     files.forEach((file) => {
       fd.append('Files', file, file.name);
     });
-    return this.http.post(this.uploadUrl, fd, { reportProgress: true, observe: 'events'});
+    return this.http.post(this.baseUrl  + 'upload/multi', fd, { reportProgress: true, observe: 'events'});
+  }
+
+  public getAllFiles() {
+    return this.http.get(this.baseUrl + 'file/getall');
+  }
+
+  public removeFile(publicId: string) {
+    return this.http.delete(this.baseUrl + 'file/' + publicId);
   }
 }

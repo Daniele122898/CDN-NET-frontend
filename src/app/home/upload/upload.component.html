@@ -68,7 +68,7 @@
             <div class="file-card-info">
                 <p>Id: {{file.id}}</p>
                 <p>Is Public: {{file.isPublic ? 'true' : 'false'}}</p>
-                <p>Name: {{file.name}}</p>
+                <p>Name: {{file.name}}{{file.fileExtension}}</p>
                 <p>Album Id: {{file.albumId == null ? 'null' : file.albumId}}</p>
                 <p>URL: <a href="{{file.url}}" target="_blank">Click Here</a></p>
             </div>
