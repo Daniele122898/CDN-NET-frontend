@@ -31,14 +31,14 @@
                     When adding filenames please specify one for EACH file and separate by ;
                 </div>
             </div>
+
             <div class="form-group">
-                <input
-                        type="number"
-                        class="form-control"
-                        formControlName="albumId"
-                        placeholder="Album ID"
-                >
+                <p style="margin: 0">Album</p>
+                <select (change)="changeAlbum($event)" formControlName="album">
+                    <option *ngFor="let album of albums" [ngValue]="album">{{album ? album.name : 'None'}}</option>
+                </select>
             </div>
+
             <div class="form-group">
                 <p style="margin: 0">Is Public</p>
                 <fa-icon

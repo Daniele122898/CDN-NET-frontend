@@ -2,4 +2,8 @@
   width: calc(100% - 200px);
   float: left;
   height: 100%;
+
+  > .content-container {
+    flex-direction: column;
+  }
 }

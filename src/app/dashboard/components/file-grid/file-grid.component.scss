@@ -1,5 +1,9 @@
 @import "../../../../shared/scss/settings";
 
+:host {
+  width: 100%;
+}
+
 .card-container {
   display: flex;
   flex-direction: column;

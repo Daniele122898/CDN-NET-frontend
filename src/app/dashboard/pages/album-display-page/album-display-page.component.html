@@ -1,10 +1,8 @@
-<div class="page">
-    <div *ngIf="this.error && this.error.length > 0" class="error-banner">
-        <p class="banner-text">{{this.error}}</p>
-    </div>
+<div *ngIf="this.error && this.error.length > 0" class="error-banner">
+    <p class="banner-text">{{this.error}}</p>
+</div>
 
-    <div class="content-container">
-        <app-file-grid [files]="files" (removeFileEvent)="removeFile($event)"></app-file-grid>
-        <p *ngIf="files == null || files.length == 0">You uploaded no files</p>
-    </div>
+<div class="content-container">
+    <app-file-grid [files]="files" (removeFileEvent)="removeFile($event)"></app-file-grid>
+    <p *ngIf="files == null || files.length == 0">You uploaded no files</p>
 </div>

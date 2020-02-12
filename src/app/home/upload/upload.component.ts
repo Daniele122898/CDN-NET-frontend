@@ -8,6 +8,8 @@ import {HttpEvent, HttpEventType} from '@angular/common/http';
 import {faCheckSquare} from '@fortawesome/free-solid-svg-icons';
 import {faCheckSquare as farCheckSquare} from '@fortawesome/free-regular-svg-icons';
 import {UploadFileInfo, UploadFileResponse} from '../../models/UploadFileInfo';
+import {AlbumSparse} from '../../models/Album';
+import {AlbumService} from '../../../services/album.service';
 
 const previewTemplate = '' +
     '  <div class="dz-details" style="' +
@@ -42,17 +44,28 @@ export class UploadComponent implements OnInit, OnDestroy {
   private uploading = false;
   private progress = 0;
   private fileResponses: UploadFileResponse[] = null;
+  private albums: AlbumSparse[];
 
   constructor(
       private fb: FormBuilder,
       private alert: AlertService,
       private changeDetection: ChangeDetectorRef,
-      private uploadService: UploadService
+      private uploadService: UploadService,
+      private albumService: AlbumService
   ) {
   }
 
   ngOnInit() {
     this.createForm();
+
+    this.albumService.getAllAlbumsSparse()
+        .subscribe((albums) => {
+          this.albums = albums;
+          this.albums.push(null);
+        }, (err) => {
+          console.log('error getting albums', err);
+        });
+
     const dropzoneConfig: DropzoneOptions = {
       url: '/#',
       createImageThumbnails: true,
@@ -71,11 +84,16 @@ export class UploadComponent implements OnInit, OnDestroy {
   private createForm() {
     this.uploadForm = this.fb.group({
       filename: [''],
-      albumId: [null],
+      album: [null],
       isPublic: [true]
     }, {
       validators: this.formValidator.bind(this)
     });
+  }
+
+
+  changeAlbum(event: Event) {
+    console.log(event);
   }
 
   private formValidator(g: FormGroup) {
@@ -155,7 +173,7 @@ export class UploadComponent implements OnInit, OnDestroy {
       }
     }
 
-    const albumId: number | null = this.uploadForm.get('albumId').value;
+    const albumId: number | null = this.uploadForm.get('album').value ? this.uploadForm.get('album').value.id : null;
 
     this.success = false;
 
@@ -258,4 +276,5 @@ export class UploadComponent implements OnInit, OnDestroy {
       console.log('text:', event.clipboardData.getData('text'));
     }
   }
+
 }
