@@ -76,6 +76,10 @@
         > .file-card__buttons {
           width: 100%;
 
+          &:hover {
+            cursor: pointer;
+          }
+
           > .file-card__delete-button {
             width: 100%;
             padding: $s-size;
@@ -85,6 +89,10 @@
             line-height: 1;
             background-color: $pastel-red;
             color: white;
+
+            &:hover {
+              cursor: pointer;
+            }
           }
         }
 
