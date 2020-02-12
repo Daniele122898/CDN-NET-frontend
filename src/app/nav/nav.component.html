@@ -1,5 +1,5 @@
 <div *ngIf="loggedIn" class="nav-bar">
     <a [routerLink]="['/']">Home</a>
-    <a [routerLink]="['/dashboard']">Dashboard</a>
+    <a [routerLink]="['/dashboard', 'allFiles']">Dashboard</a>
     <a class="pseudo-link" (click)="onLogout()">Logout</a>
 </div>

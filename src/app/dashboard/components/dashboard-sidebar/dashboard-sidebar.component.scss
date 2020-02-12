@@ -1,0 +1,37 @@
+@import "src/shared/scss/settings";
+
+.sidebar {
+  > .item {
+    padding: $xs-size $xs-size $xs-size $m-size;
+    transition: all 200ms ease-in-out;
+
+    &:hover {
+      background-color: $light-grey;
+      cursor: pointer;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  > .active{
+    background-color: black;
+    color: white;
+
+    &:hover {
+      background-color: black;
+      color: white;
+    }
+  }
+
+  > .subtitle {
+    font-weight: bold;
+    padding: 0 $xs-size;
+    margin: 0;
+
+    &:first-child {
+      padding-top: 0;
+    }
+  }
+}

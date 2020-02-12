@@ -1,34 +1,50 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {AlertService} from '../../services/alert.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute } from '@angular/router';
+import {AlbumService} from '../../../../services/album.service';
+import {AlertService} from '../../../../services/alert.service';
+import {UploadFileResponse} from '../../../models/UploadFileInfo';
+import {Album} from '../../../models/Album';
 import {FileService} from '../../services/file.service';
-import {UploadFileResponse} from '../models/UploadFileInfo';
-import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  selector: 'app-album-display-page',
+  templateUrl: './album-display-page.component.html',
+  styleUrls: ['./album-display-page.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class AlbumDisplayPageComponent implements OnInit, OnDestroy {
 
-  private faTrash = faTrash;
-
+  private album: Album;
   private files: UploadFileResponse[][] = [];
   private filesBeforeStacking: UploadFileResponse[] = [];
   private error: string = null;
 
+  private destroy$ = new Subject();
+
   constructor(
+      private activatedRoute: ActivatedRoute,
+      private albumService: AlbumService,
       private alert: AlertService,
       private fileService: FileService
   ) { }
 
   ngOnInit() {
-    this.fileService.getAllFiles().subscribe((resp: any) => {
-      this.filesBeforeStacking = resp;
-      this.setupSeparatedFilesArray(resp);
-    }, (err) => {
-      console.log(err);
-      this.error = err.error;
+    this.activatedRoute.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      const id = params.id;
+      if (!id) {
+        // TODO Change to 404
+        this.alert.error('Error getting album');
+        return;
+      }
+
+      this.albumService.getPrivateAlbum(id).subscribe((album) => {
+        this.album = album;
+        this.filesBeforeStacking = album.files;
+        this.setupSeparatedFilesArray(album.files);
+      }, (err) => {
+        this.alert.error('Error getting album: ' + err.error);
+      });
     });
   }
 
@@ -70,4 +86,9 @@ export class DashboardComponent implements OnInit {
       });
     });
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+  }
+
 }

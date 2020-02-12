@@ -1,0 +1,26 @@
+<div class="card-container" *ngIf="files && files.length > 0">
+    <div class="file-row" *ngFor="let fileRow of files">
+        <div class="file-holder" *ngFor="let file of fileRow">
+            <div class="file-card__empty" *ngIf="file == null"></div>
+            <div class="file-card" *ngIf="file">
+                <div class="file-card-img">
+                    <img src="{{file.url}}" alt="File-Image" *ngIf="file.contentType.includes('image') && file.isPublic" >
+                </div>
+                <ul class="file-card__list">
+                    <li class="file-card__list-item">{{file.name}}{{file.fileExtension}}</li>
+                    <li class="file-card__list-item">{{file.isPublic ? 'Public' : 'Private'}}</li>
+                    <li class="file-card__list-item">AlbumID: {{file.albumId == null ? 'none' : file.albumId}}</li>
+                    <li class="file-card__list-item">URL: <a href="{{file.url}}" target="_blank">Click Here</a></li>
+                </ul>
+                <div class="file-card__id">
+                    <p>ID: {{file.id}}</p>
+                </div>
+                <div class="file-card__buttons">
+                    <button class="file-card__delete-button" (click)="removeFile(file.publicId)">
+                        <fa-icon [icon]="faTrash"></fa-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

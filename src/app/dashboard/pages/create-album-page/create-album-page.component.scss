@@ -1,0 +1,22 @@
+.album-form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    > .form-group {
+      min-width: 50%;
+    }
+  }
+}
+
+:host {
+  width: calc(100% - 200px);
+  float: left;
+  height: 100%;
+}

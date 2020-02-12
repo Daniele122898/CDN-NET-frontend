@@ -7,7 +7,7 @@ import {throwError} from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class FileService {
+export class UploadService {
 
   private baseUrl = environment.apiUrl;
 
@@ -30,13 +30,5 @@ export class FileService {
       fd.append('Files', file, file.name);
     });
     return this.http.post(this.baseUrl  + 'upload/multi', fd, { reportProgress: true, observe: 'events'});
-  }
-
-  public getAllFiles() {
-    return this.http.get(this.baseUrl + 'file/getall');
-  }
-
-  public removeFile(publicId: string) {
-    return this.http.delete(this.baseUrl + 'file/' + publicId);
   }
 }

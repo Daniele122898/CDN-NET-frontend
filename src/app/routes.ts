@@ -2,24 +2,12 @@ import {Routes} from '@angular/router';
 import {HomeComponent} from './home/home.component';
 import {RegisterComponent} from './register/register.component';
 import {LoginComponent} from './login/login.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {AuthGuard} from '../guards/auth.guard';
+import {dashboardRoutes} from './dashboard/routes/dashboard.routes';
 
 export const appRoutes: Routes = [
     {
         path: '',
         component: HomeComponent
-    },
-    {
-      path: '',
-      runGuardsAndResolvers: 'always',
-      canActivate: [AuthGuard],
-      children: [
-          {
-              path: 'dashboard',
-              component: DashboardComponent
-          }
-      ]
     },
     {
         path: 'register',
@@ -28,5 +16,10 @@ export const appRoutes: Routes = [
     {
         path: 'login',
         component: LoginComponent
+    },
+    ...dashboardRoutes,
+    {
+        path: '**',
+        component: HomeComponent
     }
 ];
