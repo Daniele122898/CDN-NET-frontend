@@ -1,0 +1,78 @@
+<div class="upload-container">
+    <div class="upload-form">
+        <form [formGroup]="uploadForm" (ngSubmit)="upload()">
+            <h1 class="form-header">Upload File(s)</h1>
+            <p class="form-subheader">You do not need to add any of the additional information below</p>
+            <p class="form-subheader">it will be auto generated for you</p>
+
+            <div *ngIf="this.error && this.error.length > 0" class="error-banner form-group">
+                <p class="banner-text">{{this.error}}</p>
+            </div>
+
+            <div *ngIf="this.uploading" class="progress-bar">
+                <div class="progress-bar-progress" [style.width]="progress+'%'"></div>
+            </div>
+
+            <div *ngIf="this.success" class="success-banner form-group">
+                <p class="banner-text">Successfully uploaded files</p>
+            </div>
+
+
+            <div></div>
+
+            <div class="form-group">
+                <input
+                        type="text"
+                        class="form-control"
+                        formControlName="filename"
+                        placeholder="Filename(s) separated by ; if multiple"
+                >
+                <div class="invalid-feedback" *ngIf="uploadForm.hasError('filenameError')">
+                    When adding filenames please specify one for EACH file and separate by ;
+                </div>
+            </div>
+
+            <div class="form-group">
+                <p style="margin: 0">Album</p>
+                <select (change)="changeAlbum($event)" formControlName="album">
+                    <option *ngFor="let album of albums" [ngValue]="album">{{album ? album.name : 'None'}}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <p style="margin: 0">Is Public</p>
+                <fa-icon
+                    [ngClass]="{'is-toggled' : uploadForm.get('isPublic').value}"
+                    [icon]="(uploadForm.get('isPublic').value ? faCheckSquare : farCheckSquare)"
+                    (click)="toggleIsPublic()"
+                    size="lg"></fa-icon>
+            </div>
+            <p style="margin: 0">Drop files or click in box</p>
+            <div id="dropzone" [ngClass]="{'dragover': this.draggingOver}">
+                <div class="fallback">
+                    <input name="file" type="file" multiple />
+                </div>
+            </div>
+
+            <div class="form-group button-group">
+                <button type="submit" class="button success-button" [disabled]="this.files.length === 0 || !this.uploadForm.valid">Upload</button>
+                <button type="button" class="button" (click)="clearDropzoneAndClearForm()">Cancel</button>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="this.fileResponses && this.fileResponses.length > 0" class="file-response-container">
+        <div class="file-card" *ngFor="let file of fileResponses">
+            <div class="file-card-image">
+                <img src="{{(file.contentType.includes('image') ? file.url : defaultImagePreview)}}" [style.object-fit]="(file.contentType.includes('image') ? 'cover' : 'contain')">
+            </div>
+            <div class="file-card-info">
+                <p>Id: {{file.id}}</p>
+                <p>Is Public: {{file.isPublic ? 'true' : 'false'}}</p>
+                <p>Name: {{file.name}}{{file.fileExtension}}</p>
+                <p>Album Id: {{file.albumId == null ? 'null' : file.albumId}}</p>
+                <p>URL: <a href="{{file.url}}" target="_blank">Click Here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+

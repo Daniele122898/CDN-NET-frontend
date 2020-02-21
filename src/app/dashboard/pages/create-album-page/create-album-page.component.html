@@ -1,0 +1,39 @@
+<div class="content-container">
+    <div class="album-form">
+        <form [formGroup]="albumForm" (ngSubmit)="createAlbum()">
+
+            <h1 class="form-header">Create a new Album</h1>
+            <p class="form-subheader">The backend doesn't need you to add a name for the album but the frontend does for usability sake</p>
+
+            <div *ngIf="this.error && this.error.length > 0" class="error-banner form-group">
+                <p class="banner-text">{{this.error}}</p>
+            </div>
+
+            <div class="form-group">
+                <input
+                    type="text"
+                    class="form-control"
+                    formControlName="name"
+                    placeholder="Album name"
+                >
+                <div class="invalid-feedback" *ngIf="albumForm.hasError('required') && albumForm.touched">
+                    Please add a name. You can create albums without a name programmatically but it's not allowed in the frontend.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <p style="margin: 0">Is Public</p>
+                <fa-icon
+                        [ngClass]="{'is-toggled' : albumForm.get('isPublic').value}"
+                        [icon]="(albumForm.get('isPublic').value ? faCheckSquare : farCheckSquare)"
+                        (click)="toggleIsPublic()"
+                        size="lg"></fa-icon>
+            </div>
+
+            <div class="form-group button-group">
+                <button type="submit" class="button success-button" [disabled]="!this.albumForm.valid">Create</button>
+            </div>
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="sidebar">
+    <p class="subtitle">General</p>
+    <div class="item" [routerLink]="['/dashboard', 'allFiles']" routerLinkActive="active">
+        <span>All Files</span>
+    </div>
+    <p class="subtitle">Albums</p>
+    <div class="item" routerLinkActive="active" *ngFor="let album of albums" (click)="selectAlbum(album)">
+        <span>{{album.name}}</span>
+    </div>
+    <div class="item" [routerLink]="['/dashboard', 'createAlbum']" routerLinkActive="active">
+        <span>+ Create New</span>
+    </div>
+</div>

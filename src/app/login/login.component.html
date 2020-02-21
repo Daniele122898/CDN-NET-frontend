@@ -1,0 +1,38 @@
+<div class="content-container">
+    <div class="form-container">
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <h1 class="form-header">Sign In</h1>
+            <p class="form-subheader">Log into an existing account</p>
+
+            <div class="form-group">
+                <input
+                        type="text"
+                        class="form-control"
+                        formControlName="username"
+                        placeholder="Username"
+                        [ngClass]="{'is-invalid' : hasGeneralError('username')}"
+                >
+                <div class="invalid-feedback" *ngIf="hasGeneralError('username')">
+                    Please enter a username between 3-20 characters long
+                </div>
+            </div>
+            <div class="form-group">
+                <input
+                        type="password"
+                        class="form-control"
+                        formControlName="password"
+                        placeholder="Password"
+                        [ngClass]="{'is-invalid' : hasGeneralError('password')}"
+                >
+                <div class="invalid-feedback" *ngIf="hasGeneralError('password')">
+                    Please enter a password between 4-20 characters long
+                </div>
+            </div>
+
+            <div class="form-group button-group">
+                <button type="submit" class="button success-button" [disabled]="!this.loginForm.valid">Submit</button>
+                <button type="button" class="button" [routerLink]="['/']">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

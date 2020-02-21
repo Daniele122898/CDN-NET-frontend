@@ -1,0 +1,53 @@
+@import "settings";
+
+.button {
+  background: white;
+  color: black;
+  border: black 1px solid;
+  border-radius: 0;
+  padding: 0.8rem 1rem;
+  display: inline-block;
+  text-decoration: none;
+  line-height: 1;
+
+  transition: all 100ms ease-in-out;
+
+  &:hover {
+    color: white;
+    background: black;
+  }
+
+  &:disabled {
+    color: $grey;
+    border: $grey 1px solid;
+  }
+
+  &:disabled:hover {
+    background-color: white;
+    color: $grey;
+  }
+}
+
+.success-button {
+  color: $green;
+  border: $green solid 1px;
+
+  &:hover {
+    color: white;
+    background: $green;
+  }
+}
+
+.danger-button {
+  color: $pastel-red;
+  border: $pastel-red solid 1px;
+
+  &:hover {
+    color: white;
+    background: $pastel-red;
+  }
+}
+
+button:focus {
+  outline: none;
+}
