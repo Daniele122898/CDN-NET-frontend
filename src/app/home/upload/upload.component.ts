@@ -31,20 +31,21 @@ const previewTemplate = '' +
 })
 export class UploadComponent implements OnInit, OnDestroy {
 
-  private uploadForm: FormGroup;
-  private dropzone: Dropzone;
-  private draggingOver = false;
-  private files: File[] = [];
-  private faCheckSquare = faCheckSquare;
-  private farCheckSquare = farCheckSquare;
-  private error: string = null;
-  private success = false;
-  private defaultImagePreview = 'https://i.imgur.com/PTRCNrQ.png';
+  public defaultImagePreview = 'https://i.imgur.com/PTRCNrQ.png';
+  public error: string = null;
+  public success = false;
+  public uploading = false;
+  public progress = 0;
+  public fileResponses: UploadFileResponse[] = null;
+  public albums: AlbumSparse[];
+  public files: File[] = [];
+  public faCheckSquare = faCheckSquare;
+  public farCheckSquare = farCheckSquare;
+  public uploadForm: FormGroup;
+  public draggingOver = false;
 
-  private uploading = false;
-  private progress = 0;
-  private fileResponses: UploadFileResponse[] = null;
-  private albums: AlbumSparse[];
+  private dropzone: Dropzone;
+
 
   constructor(
       private fb: FormBuilder,
@@ -81,60 +82,7 @@ export class UploadComponent implements OnInit, OnDestroy {
     this.dropzone.on('removedfile', this.removedFile.bind(this));
   }
 
-  private createForm() {
-    this.uploadForm = this.fb.group({
-      filename: [''],
-      album: [null],
-      isPublic: [true]
-    }, {
-      validators: this.formValidator.bind(this)
-    });
-  }
-
-
-  changeAlbum(event: Event) {
-    console.log(event);
-  }
-
-  private formValidator(g: FormGroup) {
-    const filenames: string = g.get('filename').value;
-    if (!filenames || filenames.length === 0) {
-      return null;
-    }
-
-    if (!filenames.includes(';') && this.files.length === 1) {
-      return null;
-    }
-
-    const split = filenames.split(';');
-
-    if (split.length === this.files.length + 1) {
-      return null;
-    }
-
-    // See if maybe only the last one is missing
-    if (split.length === this.files.length && split[split.length - 1].trim().length > 0) {
-      return null;
-    }
-
-    return { filenameError: true };
-  }
-
-  private addedFile(event) {
-    console.log('added file event:', event);
-    if (!event.type.includes('image/')) {
-      this.dropzone.emit('thumbnail', event, this.defaultImagePreview);
-    }
-    this.files.push(event);
-  }
-
-  private removedFile(event) {
-    console.log('removed file event:', event);
-    this.files = this.files.filter((file) => file.name !== event.name);
-    this.uploadForm.updateValueAndValidity();
-  }
-
-  private upload() {
+  public upload() {
     if (!this.uploadForm.valid) {
       return;
     }
@@ -205,15 +153,7 @@ export class UploadComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private toggleIsPublic() {
-    this.uploadForm.get('isPublic').setValue(!this.uploadForm.get('isPublic').value);
-  }
-
-  private hasGeneralError(formName: string): boolean {
-    return this.uploadForm.get(formName).errors && this.uploadForm.get(formName).touched;
-  }
-
-  private clearDropzoneAndClearForm() {
+  public clearDropzoneAndClearForm() {
     this.files = this.files.filter((f) => {
       const foundFile = this.dropzone.files.find((df) => df.name === f.name);
       return !foundFile;
@@ -232,6 +172,67 @@ export class UploadComponent implements OnInit, OnDestroy {
     this.error = null;
     this.success = false;
     this.uploadForm.reset({isPublic: true});
+  }
+
+  public toggleIsPublic() {
+    this.uploadForm.get('isPublic').setValue(!this.uploadForm.get('isPublic').value);
+  }
+
+  private createForm() {
+    this.uploadForm = this.fb.group({
+      filename: [''],
+      album: [null],
+      isPublic: [true]
+    }, {
+      validators: this.formValidator.bind(this)
+    });
+  }
+
+
+  changeAlbum(event: Event) {
+    console.log(event);
+  }
+
+  private formValidator(g: FormGroup) {
+    const filenames: string = g.get('filename').value;
+    if (!filenames || filenames.length === 0) {
+      return null;
+    }
+
+    if (!filenames.includes(';') && this.files.length === 1) {
+      return null;
+    }
+
+    const split = filenames.split(';');
+
+    if (split.length === this.files.length + 1) {
+      return null;
+    }
+
+    // See if maybe only the last one is missing
+    if (split.length === this.files.length && split[split.length - 1].trim().length > 0) {
+      return null;
+    }
+
+    return { filenameError: true };
+  }
+
+  private addedFile(event) {
+    console.log('added file event:', event);
+    if (!event.type.includes('image/')) {
+      this.dropzone.emit('thumbnail', event, this.defaultImagePreview);
+    }
+    this.files.push(event);
+  }
+
+  private removedFile(event) {
+    console.log('removed file event:', event);
+    this.files = this.files.filter((file) => file.name !== event.name);
+    this.uploadForm.updateValueAndValidity();
+  }
+
+  private hasGeneralError(formName: string): boolean {
+    return this.uploadForm.get(formName).errors && this.uploadForm.get(formName).touched;
   }
 
   private dragleave() {

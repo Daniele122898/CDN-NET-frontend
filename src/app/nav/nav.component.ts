@@ -12,8 +12,7 @@ import {AlertService} from '../../services/alert.service';
 })
 export class NavComponent implements OnInit, OnDestroy {
 
-
-  private loggedIn = false;
+  public loggedIn = false;
 
   private destroy$ = new Subject();
 

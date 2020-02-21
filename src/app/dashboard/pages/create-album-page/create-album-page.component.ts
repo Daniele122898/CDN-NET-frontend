@@ -12,11 +12,11 @@ import {AlbumService} from '../../../../services/album.service';
 })
 export class CreateAlbumPageComponent implements OnInit {
 
-  private faCheckSquare = faCheckSquare;
-  private farCheckSquare = farCheckSquare;
+  public faCheckSquare = faCheckSquare;
+  public farCheckSquare = farCheckSquare;
 
-  private albumForm: FormGroup;
-  private error: string;
+  public albumForm: FormGroup;
+  public error: string;
 
   constructor(
       private fb: FormBuilder,
@@ -24,18 +24,15 @@ export class CreateAlbumPageComponent implements OnInit {
       private albumService: AlbumService
   ) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.createFrom();
   }
 
-  private createFrom(): void {
-    this.albumForm = this.fb.group({
-      name: ['', Validators.required],
-      isPublic: [true]
-    });
+  public toggleIsPublic() {
+    this.albumForm.get('isPublic').setValue(!this.albumForm.get('isPublic').value);
   }
 
-  private createAlbum() {
+  public createAlbum() {
     if (!this.albumForm.valid) {
       return;
     }
@@ -49,10 +46,14 @@ export class CreateAlbumPageComponent implements OnInit {
         }, (err) => {
           this.error = err.error;
         });
-
   }
 
-  private toggleIsPublic() {
-    this.albumForm.get('isPublic').setValue(!this.albumForm.get('isPublic').value);
+  private createFrom(): void {
+    this.albumForm = this.fb.group({
+      name: ['', Validators.required],
+      isPublic: [true]
+    });
   }
+
+
 }

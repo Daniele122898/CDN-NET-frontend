@@ -11,7 +11,7 @@ import {AlertService} from '../../services/alert.service';
 })
 export class LoginComponent implements OnInit {
 
-  private loginForm: FormGroup;
+  public loginForm: FormGroup;
 
   constructor(
       private fb: FormBuilder,
@@ -27,19 +27,15 @@ export class LoginComponent implements OnInit {
     return err.statusText;
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.createRegisterForm();
   }
 
-  private createRegisterForm() {
-    this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
-    });
+  public hasGeneralError(formName: string): boolean {
+    return this.loginForm.get(formName).errors && this.loginForm.get(formName).touched;
   }
 
-
-  private login() {
+  public login() {
     if (!this.loginForm.valid) {
       return;
     }
@@ -54,8 +50,10 @@ export class LoginComponent implements OnInit {
         });
   }
 
-  private hasGeneralError(formName: string): boolean {
-    return this.loginForm.get(formName).errors && this.loginForm.get(formName).touched;
+  private createRegisterForm() {
+    this.loginForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
+    });
   }
-
 }

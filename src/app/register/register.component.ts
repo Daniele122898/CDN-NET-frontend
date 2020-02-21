@@ -11,7 +11,7 @@ import {AlertService} from '../../services/alert.service';
 })
 export class RegisterComponent implements OnInit {
 
-  private registerForm: FormGroup;
+  public registerForm: FormGroup;
 
   constructor(
       private fb: FormBuilder,
@@ -31,22 +31,11 @@ export class RegisterComponent implements OnInit {
     return err.statusText;
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.createRegisterForm();
   }
 
-  private createRegisterForm() {
-    this.registerForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
-      confirmPassword: ['', Validators.required]
-    }, {
-      validators: RegisterComponent.passwordMatchValidator
-    });
-  }
-
-
-  private register() {
+  public register() {
     if (!this.registerForm.valid) {
       return;
     }
@@ -65,7 +54,17 @@ export class RegisterComponent implements OnInit {
         });
   }
 
-  private hasGeneralError(formName: string): boolean {
+  public hasGeneralError(formName: string): boolean {
     return this.registerForm.get(formName).errors && this.registerForm.get(formName).touched;
+  }
+
+  private createRegisterForm() {
+    this.registerForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
+      confirmPassword: ['', Validators.required]
+    }, {
+      validators: RegisterComponent.passwordMatchValidator
+    });
   }
 }

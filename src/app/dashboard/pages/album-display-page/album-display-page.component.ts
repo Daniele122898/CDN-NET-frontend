@@ -15,10 +15,11 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class AlbumDisplayPageComponent implements OnInit, OnDestroy {
 
+  public files: UploadFileResponse[][] = [];
+  public error: string = null;
+
   private album: Album;
-  private files: UploadFileResponse[][] = [];
   private filesBeforeStacking: UploadFileResponse[] = [];
-  private error: string = null;
 
   private destroy$ = new Subject();
 

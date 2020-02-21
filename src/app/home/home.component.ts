@@ -10,7 +10,7 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  private isLoggedIn = false;
+  public isLoggedIn = false;
 
   private destroy$ = new Subject();
 

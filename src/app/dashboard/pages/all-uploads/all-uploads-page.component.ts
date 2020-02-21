@@ -10,9 +10,10 @@ import {FileService} from '../../services/file.service';
 })
 export class AllUploadsPageComponent implements OnInit {
 
-  private files: UploadFileResponse[][] = [];
+  public files: UploadFileResponse[][] = [];
+  public error: string = null;
+
   private filesBeforeStacking: UploadFileResponse[] = [];
-  private error: string = null;
 
   constructor(
       private alert: AlertService,

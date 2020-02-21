@@ -12,7 +12,7 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class DashboardSidebarComponent implements OnInit, OnDestroy {
 
-  private albums: AlbumSparse[];
+  public albums: AlbumSparse[];
 
   private destroy$ = new Subject();
 

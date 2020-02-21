@@ -12,7 +12,7 @@ export class FileGridComponent implements OnInit {
   @Input() files: UploadFileResponse[][] = [];
   @Output() removeFileEvent = new EventEmitter<string>();
 
-  private faTrash = faTrash;
+  public faTrash = faTrash;
 
   constructor() { }
 
