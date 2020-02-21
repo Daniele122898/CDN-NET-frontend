@@ -8,10 +8,12 @@ export class AlertService {
 
   constructor() { }
 
-  public confirm(message: string, okCallback: () => any) {
+  public confirm(message: string, okCallback: () => any, notOkCallback?: () => any) {
     alertify.confirm(message, (e: any) => {
       if (e) {
         okCallback();
+      } else if (notOkCallback) {
+        notOkCallback();
       }
     });
   }

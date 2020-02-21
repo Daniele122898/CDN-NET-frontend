@@ -38,6 +38,16 @@
   }
 }
 
+.danger-button {
+  color: $pastel-red;
+  border: $pastel-red solid 1px;
+
+  &:hover {
+    color: white;
+    background: $pastel-red;
+  }
+}
+
 button:focus {
   outline: none;
 }

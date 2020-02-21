@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {environment} from '../environments/environment';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Album, AlbumSparse} from '../app/models/Album';
 
@@ -31,6 +31,11 @@ export class AlbumService {
 
   getPrivateAlbum(albumId: string): Observable<Album> {
     return this.http.get<Album>(this.baseUrl + 'album/' + albumId);
+  }
+
+  removeAlbum(albumId: number, removeFiles: boolean): Observable<any> {
+    const httpParams = new HttpParams().set('removeFiles', removeFiles.toString());
+    return this.http.delete(this.baseUrl + 'album/' + albumId, {params: httpParams});
   }
 
   resetAlbums(): void {
