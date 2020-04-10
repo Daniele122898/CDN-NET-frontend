@@ -3,8 +3,15 @@
         <p class="banner-text">{{this.error}}</p>
     </div>
 
-    <div class="content-container">
+    <div class="content-container flex-direction-col">
         <app-file-grid [files]="files" (removeFileEvent)="removeFile($event)"></app-file-grid>
         <p *ngIf="files == null || files.length == 0">You uploaded no files</p>
+        <mat-paginator
+            *ngIf="files != null"
+            [pageSize]="this.pageSize"
+            [length]="this.totalNumberOfFiles"
+            [pageSizeOptions]="[15, 30, 45, 60]"
+            (page)="pageChangedEvent($event)">
+        </mat-paginator>
     </div>
 </div>

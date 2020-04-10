@@ -10,6 +10,7 @@ import { CreateAlbumPageComponent } from './pages/create-album-page/create-album
 import {ReactiveFormsModule} from '@angular/forms';
 import { AlbumDisplayPageComponent } from './pages/album-display-page/album-display-page.component';
 import { FileGridComponent } from './components/file-grid/file-grid.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 
 
@@ -30,6 +31,7 @@ import { FileGridComponent } from './components/file-grid/file-grid.component';
     FontAwesomeModule,
     HttpClientModule,
     ReactiveFormsModule,
+    MatPaginatorModule
   ]
 })
 export class DashboardModule { }
