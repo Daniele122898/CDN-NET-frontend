@@ -3,6 +3,7 @@ import {AlertService} from '../../../../services/alert.service';
 import {UploadFileResponse} from '../../../models/UploadFileInfo';
 import {FileService} from '../../services/file.service';
 import {PaginatedResult} from '../../../models/Pagination';
+import {PageEvent} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-all-uploads',
@@ -15,7 +16,8 @@ export class AllUploadsPageComponent implements OnInit {
   public error: string = null;
 
   public pageNumber = 1;
-  public pageSize = 1;
+  public pageSize = 15;
+  public totalNumberOfFiles = 0;
 
   private filesBeforeStacking: UploadFileResponse[] = [];
 
@@ -25,8 +27,31 @@ export class AllUploadsPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getNewPageResults();
+  }
+
+  public pageChangedEvent(e: PageEvent) {
+    this.pageSize = e.pageSize;
+    this.pageNumber = e.pageIndex + 1;
+    this.getNewPageResults();
+  }
+
+  public removeFile(publicId: string) {
+    this.alert.confirm('Are you sure you want to delete this file?', () => {
+      this.fileService.removeFile(publicId).subscribe(() => {
+        this.filesBeforeStacking = this.filesBeforeStacking.filter((f) => f.publicId !== publicId);
+        this.setupSeparatedFilesArray(this.filesBeforeStacking);
+      }, (err) => {
+        console.log(err);
+        this.alert.error('Failed to remove file: ' + err.error);
+      });
+    });
+  }
+
+  private getNewPageResults() {
     this.fileService.getAllFilesPaginated(this.pageNumber, this.pageSize).subscribe((resp: PaginatedResult<UploadFileResponse[]>) => {
       this.filesBeforeStacking = resp.result;
+      this.totalNumberOfFiles = resp.pagination.totalItems;
       this.setupSeparatedFilesArray(resp.result);
     }, (err) => {
       console.log(err);
@@ -59,17 +84,5 @@ export class AllUploadsPageComponent implements OnInit {
       i++;
       this.files.push(filesToAdd);
     }
-  }
-
-  removeFile(publicId: string) {
-    this.alert.confirm('Are you sure you want to delete this file?', () => {
-      this.fileService.removeFile(publicId).subscribe(() => {
-        this.filesBeforeStacking = this.filesBeforeStacking.filter((f) => f.publicId !== publicId);
-        this.setupSeparatedFilesArray(this.filesBeforeStacking);
-      }, (err) => {
-        console.log(err);
-        this.alert.error('Failed to remove file: ' + err.error);
-      });
-    });
   }
 }
