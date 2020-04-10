@@ -3,7 +3,7 @@
         <p class="banner-text">{{this.error}}</p>
     </div>
 
-    <div class="content-container">
+    <div class="content-container flex-direction-col">
         <app-file-grid [files]="files" (removeFileEvent)="removeFile($event)"></app-file-grid>
         <p *ngIf="files == null || files.length == 0">You uploaded no files</p>
     </div>

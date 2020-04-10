@@ -14,6 +14,7 @@ import { NavComponent } from './nav/nav.component';
 import { UploadComponent } from './home/upload/upload.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {DashboardModule} from './dashboard/dashboard.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -42,7 +43,8 @@ export function tokenGetter() {
       }
     }),
     FontAwesomeModule,
-    DashboardModule
+    DashboardModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

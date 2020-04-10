@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, HostBinding, OnInit} from '@angular/core';
 import {AlertService} from '../../../../services/alert.service';
 import {UploadFileResponse} from '../../../models/UploadFileInfo';
 import {FileService} from '../../services/file.service';
+import {PaginatedResult} from '../../../models/Pagination';
 
 @Component({
   selector: 'app-all-uploads',
@@ -13,6 +14,9 @@ export class AllUploadsPageComponent implements OnInit {
   public files: UploadFileResponse[][] = [];
   public error: string = null;
 
+  public pageNumber = 1;
+  public pageSize = 1;
+
   private filesBeforeStacking: UploadFileResponse[] = [];
 
   constructor(
@@ -21,9 +25,9 @@ export class AllUploadsPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fileService.getAllFiles().subscribe((resp: any) => {
-      this.filesBeforeStacking = resp;
-      this.setupSeparatedFilesArray(resp);
+    this.fileService.getAllFilesPaginated(this.pageNumber, this.pageSize).subscribe((resp: PaginatedResult<UploadFileResponse[]>) => {
+      this.filesBeforeStacking = resp.result;
+      this.setupSeparatedFilesArray(resp.result);
     }, (err) => {
       console.log(err);
       this.error = err.error;
