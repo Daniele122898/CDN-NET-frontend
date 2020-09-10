@@ -19,11 +19,13 @@ export class DownloadAuthFileDirective {
 
   @HostListener('click')
   public async onClick(): Promise<void> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
 
     // Download the document as a blob
     const response = await this.http.get(
         this.downloadUrl,
-        { responseType: 'blob', observe: 'response' }
+        { headers, responseType: 'blob', observe: 'response' }
     ).toPromise();
 
     // Create a URL for the blob
