@@ -30,7 +30,7 @@ export class AlbumService {
   }
 
   getPrivateAlbum(albumId: string): Observable<Album> {
-    return this.http.get<Album>(this.baseUrl + 'album/' + albumId);
+    return this.http.get<Album>(this.baseUrl + 'album/private/' + albumId);
   }
 
   removeAlbum(albumId: number, removeFiles: boolean): Observable<any> {

@@ -5,12 +5,14 @@
             <div class="file-card" *ngIf="file">
                 <div class="file-card-img">
                     <img src="{{file.url}}" alt="File-Image" *ngIf="file.contentType.includes('image') && file.isPublic" >
+                    <img [src]="file.url | authImage | async" alt="File-Image" *ngIf="file.contentType.includes('image') && !file.isPublic" >
                 </div>
                 <ul class="file-card__list">
                     <li class="file-card__list-item">{{file.name}}{{file.fileExtension}}</li>
                     <li class="file-card__list-item">{{file.isPublic ? 'Public' : 'Private'}}</li>
                     <li class="file-card__list-item">AlbumID: {{file.albumId == null ? 'none' : file.albumId}}</li>
-                    <li class="file-card__list-item">URL: <a href="{{file.url}}" target="_blank">Click Here</a></li>
+                    <li class="file-card__list-item" *ngIf="file.isPublic">URL: <a href="{{file.url}}" target="_blank">Click Here</a></li>
+                    <li class="file-card__list-item" *ngIf="!file.isPublic"><a [downloadAuthFile]="file.url" href="" (click)="$event.preventDefault()">Download</a></li>
                 </ul>
                 <div class="file-card__id">
                     <p>ID: {{file.id}}</p>
