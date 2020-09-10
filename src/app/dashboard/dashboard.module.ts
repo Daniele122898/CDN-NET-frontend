@@ -11,6 +11,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { AlbumDisplayPageComponent } from './pages/album-display-page/album-display-page.component';
 import { FileGridComponent } from './components/file-grid/file-grid.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { AuthImagePipePipe } from './pipes/auth-image-pipe.pipe';
+import { DownloadAuthFileDirective } from './directives/download-auth-file.directive';
 
 
 
@@ -21,7 +23,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     AllUploadsPageComponent,
     CreateAlbumPageComponent,
     AlbumDisplayPageComponent,
-    FileGridComponent
+    FileGridComponent,
+    AuthImagePipePipe,
+    DownloadAuthFileDirective
   ],
   exports: [
   ],
