@@ -39,7 +39,7 @@
     "@angular/compiler-cli": "~9.1.0",
     "@angular/language-service": "~9.1.0",
     "@types/dropzone": "^5.5.2",
-    "@types/jasmine": "~3.3.8",
+    "@types/jasmine": "~3.6.6",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
